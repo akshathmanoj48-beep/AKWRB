@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Akshath Manoj — Home</title>
+    <style>
+      /* =========================================
+   DESIGN TOKENS
+   (same palette as AK AIR Booking, so every page
+   on the site feels like one connected place)
+========================================= */
+      :root {
+        --sky-blue: #0bb8f1;
+        --aviation-green: #43a940;
+        --deep-navy: #0a2540;
+        --navy-soft: #12335c;
+        --cloud-white: #f7fafc;
+        --runway-gray: #e8edf2;
+        --amber: #ffb100;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: var(--cloud-white);
+        color: var(--deep-navy);
+        overflow-x: hidden;
+      }
+
+      h1, h2, h3 {
+        font-family: "Space Grotesk", Arial, sans-serif;
+      }
+
+      @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap");
+
+      a {
+        text-decoration: none;
+      }
+
+      /* =========================================
+   NAVBAR
+========================================= */
+      #navbar {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+
+        width: 100%;
+        padding: 16px 36px;
+
+        background: rgba(255, 255, 255, 0.82);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border-bottom: 1px solid rgba(7, 59, 115, 0.15);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+      }
+
+      .brand {
+        font-family: "Space Grotesk", Arial, sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+
+        background: linear-gradient(to right, var(--sky-blue), var(--aviation-green));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+
+        flex-shrink: 0;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 26px;
+        flex-wrap: wrap;
+      }
+
+      .nav-links a {
+        color: var(--navy-soft);
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        transition: color 0.2s ease;
+      }
+
+      .nav-links a:hover {
+        color: var(--aviation-green);
+      }
+
+      .nav-auth {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0;
+      }
+
+      .nav-auth a {
+        font-size: 13px;
+        font-weight: 700;
+        padding: 9px 18px;
+        border-radius: 20px;
+        white-space: nowrap;
+      }
+
+      .nav-auth .login-link {
+        color: var(--navy-soft);
+        border: 1px solid rgba(7, 59, 115, 0.25);
+      }
+
+      .nav-auth .login-link:hover {
+        background: var(--runway-gray);
+      }
+
+      .nav-auth .register-link {
+        color: #fff;
+        background: linear-gradient(135deg, #0874c9, #43a940);
+      }
+
+      .nav-auth .register-link:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+      }
+
+      /* =========================================
+   HERO
+========================================= */
+      #hero {
+        position: relative;
+        overflow: hidden;
+
+        width: 100%;
+        padding: 120px 24px 130px;
+
+        text-align: center;
+
+        background: linear-gradient(160deg, var(--deep-navy), var(--navy-soft));
+        color: var(--cloud-white);
+      }
+
+      #hero::before {
+        content: "";
+        position: absolute;
+        top: 18%;
+        left: -5%;
+        width: 110%;
+        height: 2px;
+
+        background-image: linear-gradient(
+          to right,
+          rgba(255, 255, 255, 0.3) 0 12px,
+          transparent 12px 24px
+        );
+        background-size: 24px 2px;
+        transform: rotate(-3deg);
+      }
+
+      #hero h1 {
+        position: relative;
+        font-size: clamp(34px, 6vw, 58px);
+        line-height: 1.15;
+        margin-bottom: 22px;
+
+        background: linear-gradient(to right, #ffffff, #bfe9ff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      #hero p {
+        position: relative;
+        max-width: 620px;
+        margin: 0 auto 36px;
+
+        font-size: 16.5px;
+        line-height: 1.75;
+        color: rgba(255, 255, 255, 0.78);
+      }
+
+      .hero-actions {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .btn-primary,
+      .btn-secondary {
+        display: inline-block;
+        padding: 14px 30px;
+        border-radius: 12px;
+        font-size: 15px;
+        font-weight: 700;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+      }
+
+      .btn-primary {
+        color: #fff;
+        background: linear-gradient(135deg, #0874c9, #43a940);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+      }
+
+      .btn-secondary {
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+      }
+
+      .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      /* =========================================
+   EXPLORE GRID
+========================================= */
+      #explore {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 80px 24px 90px;
+      }
+
+      #explore h2 {
+        text-align: center;
+        font-size: 32px;
+        color: var(--deep-navy);
+        margin-bottom: 10px;
+      }
+
+      #explore > p {
+        text-align: center;
+        max-width: 600px;
+        margin: 0 auto 46px;
+        color: #64748b;
+        line-height: 1.6;
+      }
+
+      .explore-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 24px;
+      }
+
+      .explore-card {
+        width: 260px;
+        background: #fff;
+        border: 1px solid #e2eaf1;
+        border-radius: 16px;
+        padding: 26px 24px;
+        box-shadow: 0 8px 22px rgba(10, 37, 64, 0.06);
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+      }
+
+      .explore-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 16px 34px rgba(10, 37, 64, 0.13);
+      }
+
+      .explore-card .icon {
+        font-size: 26px;
+        display: block;
+        margin-bottom: 14px;
+      }
+
+      .explore-card h3 {
+        font-size: 17px;
+        color: var(--deep-navy);
+        margin-bottom: 8px;
+      }
+
+      .explore-card p {
+        font-size: 14px;
+        color: #64748b;
+        line-height: 1.6;
+        margin-bottom: 16px;
+      }
+
+      .explore-card .go-link {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--sky-blue);
+      }
+
+      .explore-card.featured {
+        border-top: 4px solid var(--sky-blue);
+        background: linear-gradient(180deg, #f4fbff, #ffffff);
+      }
+
+      /* =========================================
+   FOOTER
+========================================= */
+      footer {
+        width: 100%;
+        background: var(--deep-navy);
+        color: rgba(255, 255, 255, 0.7);
+        text-align: center;
+        padding: 40px 24px 30px;
+        font-size: 13.5px;
+        line-height: 1.8;
+      }
+
+      footer .footer-brand {
+        color: #fff;
+        font-weight: 700;
+        font-family: "Space Grotesk", Arial, sans-serif;
+        margin-bottom: 6px;
+        display: block;
+      }
+
+      #google_translate_element {
+        margin-top: 16px;
+        display: flex;
+        justify-content: center;
+      }
+
+      /* =========================================
+   MOBILE
+========================================= */
+      @media (max-width: 900px) {
+        #navbar {
+          flex-wrap: wrap;
+          justify-content: center;
+          text-align: center;
+        }
+
+        .nav-links {
+          justify-content: center;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .hero-actions {
+          flex-direction: column;
+          width: 100%;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+          width: 100%;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="navbar">
+      <span class="brand">AKSHATH</span>
+
+      <div class="nav-links">
+        <a href="https://akshath.neocities.org/index.html">Home</a>
+        <a href="https://akshath.neocities.org/about%20me.html">About Me</a>
+        <a href="https://open.spotify.com/playlist/37i9dQZF1DWTDMgeFBuHG4" target="_blank">My Playlist</a>
+        <a href="https://akshath.neocities.org/faq.html">FAQ</a>
+        <a href="https://akshath.neocities.org/vid2.html">Gallery</a>
+        <a href="https://akshath.neocities.org/Airline.html">AK Air Booking</a>
+      </div>
+
+      <div class="nav-auth">
+        <a href="https://akshath.neocities.org/log.html" class="login-link">Log In</a>
+        <a href="https://akshath.neocities.org/reg.html" class="register-link">Register</a>
+      </div>
+    </div>
+
+    <section id="hero">
+      <h1>Welcome to My Corner of the Web</h1>
+      <p>
+        Hi, I'm Akshath Manoj, a 9th-standard student. This site is my project
+        for the MES Campus School, KTPM digital fest — built entirely with
+        HTML and CSS. Explore the links below to see everything I've made,
+        from a movie library to a fictional airline booking site.
+      </p>
+      <div class="hero-actions">
+        <a href="movie.html" class="btn-primary">Watch Movies</a>
+        <a href="https://akshath.neocities.org/Airline.html" class="btn-secondary">Explore AK Air Booking</a>
+      </div>
+    </section>
+
+    <section id="explore">
+      <h2>Explore the Site</h2>
+      <p>Everything on this site, in one place. Pick a destination below.</p>
+
+      <div class="explore-grid">
+        <a class="explore-card featured" href="https://akshath.neocities.org/Airline.html">
+          <span class="icon">✈️</span>
+          <h3>AK Air Booking</h3>
+          <p>Search and "book" a flight on my fictional airline, AK AIR.</p>
+          <span class="go-link">Open →</span>
+        </a>
+
+        <a class="explore-card" href="https://akshath.neocities.org/about%20me.html">
+          <span class="icon">🙋</span>
+          <h3>About Me</h3>
+          <p>A bit more about who's behind this site.</p>
+          <span class="go-link">Open →</span>
+        </a>
+
+        <a class="explore-card" href="https://akshath.neocities.org/vid2.html">
+          <span class="icon">🖼️</span>
+          <h3>Gallery</h3>
+          <p>A look at things I've made and put together.</p>
+          <span class="go-link">Open →</span>
+        </a>
+
+        <a class="explore-card" href="https://akshath.neocities.org/game.html">
+          <span class="icon">🎮</span>
+          <h3>Guess Game</h3>
+          <p>A quick guessing game — see if you can win.</p>
+          <span class="go-link">Open →</span>
+        </a>
+
+        <a class="explore-card" href="https://open.spotify.com/playlist/37i9dQZF1DWTDMgeFBuHG4" target="_blank">
+          <span class="icon">🎵</span>
+          <h3>My Playlist</h3>
+          <p>What I've been listening to lately, on Spotify.</p>
+          <span class="go-link">Open →</span>
+        </a>
+
+        <a class="explore-card" href="https://akshath.neocities.org/pricing.html">
+          <span class="icon">💳</span>
+          <h3>Pricing</h3>
+          <p>A demo pricing page I built for practice.</p>
+          <span class="go-link">Open →</span>
+        </a>
+
+        <a class="explore-card" href="https://akshath.neocities.org/reg.html">
+          <span class="icon">📝</span>
+          <h3>Register (Demo)</h3>
+          <p>Try out a demo sign-up flow.</p>
+          <span class="go-link">Open →</span>
+        </a>
+
+        <a class="explore-card" href="https://akshath.neocities.org/log.html">
+          <span class="icon">🔑</span>
+          <h3>Log In (Demo)</h3>
+          <p>Try out a demo login flow.</p>
+          <span class="go-link">Open →</span>
+        </a>
+
+        <a class="explore-card" href="https://akshath.neocities.org/faq.html">
+          <span class="icon">❓</span>
+          <h3>FAQ</h3>
+          <p>Answers to common questions about this site.</p>
+          <span class="go-link">Open →</span>
+        </a>
+      </div>
+    </section>
+
+    <footer>
+      <span class="footer-brand">Akshath Manoj</span>
+      Built for the MES Campus School, KTPM Digital Fest · HTML &amp; CSS
+
+      <div id="google_translate_element"></div>
+    </footer>
+
+    <script type="text/javascript">
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement(
+          { pageLanguage: "en" },
+          "google_translate_element"
+        );
+      }
+    </script>
+    <script
+      type="text/javascript"
+      src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+    ></script>
+
+    <script type="module">
+      // Firebase (kept from your original setup)
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-analytics.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyAkN-BczC0nYZaNReDbQIDhTBw01ErtjLA",
+        authDomain: "akshath-80745.firebaseapp.com",
+        projectId: "akshath-80745",
+        storageBucket: "akshath-80745.firebasestorage.app",
+        messagingSenderId: "183756071011",
+        appId: "1:183756071011:web:4c6187b8f2e837a0285856",
+        measurementId: "G-6YG9JXXSXY",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+    </script>
+  </body>
+</html>

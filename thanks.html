@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AK AIR | Thank You</title>
+    <style>
+      :root {
+        --navy: #0a2346;
+        --navy-soft: #153c68;
+        --blue: #1e88e5;
+        --mint: #40d7b2;
+        --ink: #1d3153;
+        --muted: #5d738b;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background:
+          radial-gradient(
+            circle at top left,
+            rgba(84, 195, 255, 0.2),
+            transparent 30%
+          ),
+          radial-gradient(
+            circle at bottom right,
+            rgba(64, 215, 178, 0.18),
+            transparent 40%
+          ),
+          linear-gradient(180deg, #edf4fb 0%, #fefefe 100%);
+        color: var(--ink);
+      }
+
+      .card {
+        width: min(560px, 100%);
+        padding: 48px 36px;
+        text-align: center;
+        background: #fff;
+        border: 1px solid rgba(15, 46, 91, 0.1);
+        border-radius: 28px;
+        box-shadow: 0 24px 60px rgba(17, 46, 86, 0.12);
+        animation: fadeUp 0.5s ease both;
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .card {
+          animation: none;
+        }
+      }
+
+      .logo {
+        width: 140px;
+        height: auto;
+        margin: 0 auto 22px;
+        display: block;
+        object-fit: contain;
+      }
+
+      .check {
+        width: 78px;
+        height: 78px;
+        margin: 0 auto 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--blue), var(--mint));
+        color: #fff;
+        font-size: 38px;
+        font-weight: 900;
+        box-shadow: 0 18px 40px rgba(30, 136, 229, 0.32);
+        animation: pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both;
+      }
+
+      @keyframes pop {
+        from {
+          opacity: 0;
+          transform: scale(0.4);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .check {
+          animation: none;
+        }
+      }
+
+      h1 {
+        color: var(--navy);
+        font-size: clamp(1.8rem, 4vw, 2.4rem);
+        letter-spacing: -0.04em;
+        line-height: 1.15;
+      }
+
+      p {
+        margin: 16px auto 0;
+        max-width: 420px;
+        color: var(--muted);
+        font-size: 1rem;
+        line-height: 1.75;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 32px;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 14px 24px;
+        border-radius: 14px;
+        font-size: 0.95rem;
+        font-weight: 800;
+        text-decoration: none;
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--blue), var(--mint));
+        color: #fff;
+        box-shadow: 0 16px 30px rgba(30, 136, 229, 0.28);
+      }
+
+      .btn-ghost {
+        background: #fff;
+        color: var(--navy-soft);
+        border: 1px solid rgba(15, 46, 91, 0.15);
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+      }
+
+      .footer-note {
+        margin-top: 28px;
+        font-size: 0.82rem;
+        color: var(--muted);
+      }
+
+      .footer-note a {
+        color: var(--blue);
+        font-weight: 700;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card">
+      <img
+        class="logo"
+        src="airline_logo.png"
+        alt="AK AIR"
+        onerror="this.style.display = 'none'"
+      />
+
+      <div class="check">✓</div>
+
+      <h1>Thank you for reaching out</h1>
+
+      <p>
+        Your message has been received. An AK AIR team member will get back to
+        you shortly — usually within 24 hours.
+      </p>
+
+      <div class="actions">
+        <a href="Airline.html" class="btn btn-primary">Back to home</a>
+        <a href="airline_search.html" class="btn btn-ghost">Browse flights</a>
+      </div>
+
+      <p class="footer-note">
+        Need urgent help? Email
+        <a href="mailto:contact@akair.com">contact@akair.com</a>
+      </p>
+    </main>
+  </body>
+</html>

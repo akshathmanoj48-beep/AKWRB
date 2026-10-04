@@ -1,0 +1,68 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url(pexels-pacific-1036419.jpg);
+  background-size: cover;
+}
+* {
+  font-family: poppins, "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+form {
+  display: flex;
+  flex-direction: column;
+}
+.box {
+  position: relative;
+  margin: 20px;
+}
+
+.box input {
+  width: 200px;
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+}
+
+.box label {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  color: gray;
+  font-size: 14px;
+  transition: 0.3s;
+  pointer-events: none;
+}
+
+.box input:focus + label,
+.box input:valid + label {
+  top: -8px;
+  left: 10px;
+  font-size: 12px;
+  color: blue;
+  background: white; /* optional for cleaner look */
+  padding: 0 3px;
+}
+
+#loginCon {
+  background-color: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  padding: 30px 30px 30px 30px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  margin-top: 250px;
+}
+
+button {
+  height: 40px;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+}
+button:hover {
+  transform: scale(1.2);
+  background-color: #494545;
+  box-shadow: #494545 2px;
+}

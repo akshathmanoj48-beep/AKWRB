@@ -1,0 +1,2387 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>AK AIR | Checkout</title>
+
+    <style>
+      /* =====================================================
+           GLOBAL
+        ===================================================== */
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+
+        background: #f4f7fa;
+
+        color: #18324a;
+
+        overflow-x: hidden;
+      }
+
+      button,
+      input,
+      select {
+        font-family: inherit;
+      }
+
+      /* =====================================================
+           HEADER
+        ===================================================== */
+
+      header {
+        position: sticky;
+
+        top: 0;
+
+        z-index: 1000;
+
+        width: 100%;
+      }
+
+      nav {
+        min-height: 72px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        padding: 10px 35px;
+
+        background: rgba(255, 255, 255, 0.92);
+
+        backdrop-filter: blur(15px);
+
+        -webkit-backdrop-filter: blur(15px);
+
+        border-bottom: 1px solid rgba(7, 59, 115, 0.12);
+
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.07);
+      }
+
+      nav img {
+        width: 100px;
+        height: 50px;
+
+        object-fit: contain;
+      }
+
+      nav a {
+        color: #075a9f;
+
+        font-size: 14px;
+
+        font-weight: 700;
+
+        text-decoration: none;
+
+        transition: color 0.2s ease;
+      }
+
+      nav a:hover {
+        color: #43a940;
+      }
+
+      /* =====================================================
+           DEMO WARNING
+        ===================================================== */
+
+      .demo-banner {
+        width: 100%;
+
+        padding: 9px 15px;
+
+        color: #664d03;
+
+        background: #fff3cd;
+
+        border-bottom: 1px solid #ffe69c;
+
+        text-align: center;
+
+        font-size: 13px;
+
+        font-weight: 700;
+      }
+
+      /* =====================================================
+           PAGE
+        ===================================================== */
+
+      .page {
+        width: 100%;
+
+        max-width: 1250px;
+
+        margin: 0 auto;
+
+        padding: 35px 25px 80px;
+      }
+
+      .page-title {
+        margin-bottom: 8px;
+
+        color: #073b73;
+
+        font-size: clamp(30px, 5vw, 45px);
+      }
+
+      .page-subtitle {
+        margin-bottom: 30px;
+
+        color: #64748b;
+
+        font-size: 15px;
+      }
+
+      .coupon-offer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin: 0 0 28px;
+        padding: 18px 20px;
+        color: #fff;
+        background: linear-gradient(110deg, #073b73, #0874c9);
+        background-size: 200% 200%;
+        animation: moveBackgroundGradient 8s ease-in-out infinite alternate;
+        border-left: 5px solid #43a940;
+        border-radius: 12px;
+      }
+
+      @keyframes moveBackgroundGradient {
+        from {
+          background-position: 0% 50%;
+        }
+        to {
+          background-position: 100% 50%;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .coupon-offer {
+          animation: none;
+        }
+      }
+
+      .coupon-offer h2 {
+        margin-bottom: 5px;
+        font-size: 18px;
+      }
+
+      .coupon-offer p {
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.5;
+      }
+
+      .coupon-offer-code {
+        flex: 0 0 auto;
+        text-align: right;
+      }
+
+      .coupon-offer-code strong {
+        display: inline-block;
+        font-size: 20px;
+        letter-spacing: 1px;
+        background: linear-gradient(90deg, #ffe16b, #ffffff 52%, #76ffe0);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+      }
+
+      .coupon-offer time {
+        font-variant-numeric: tabular-nums;
+        font-weight: 800;
+      }
+
+      /* =====================================================
+           LAYOUT
+        ===================================================== */
+
+      .checkout-layout {
+        display: grid;
+
+        grid-template-columns:
+          minmax(0, 1.6fr)
+          minmax(300px, 0.8fr);
+
+        align-items: start;
+
+        gap: 25px;
+      }
+
+      .left-column,
+      .right-column {
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 20px;
+      }
+
+      /* =====================================================
+           CARD
+        ===================================================== */
+
+      .card {
+        padding: 25px;
+
+        background: white;
+
+        border: 1px solid #e1e8ef;
+
+        border-radius: 18px;
+
+        box-shadow: 0 7px 25px rgba(0, 0, 0, 0.06);
+      }
+
+      .card-title {
+        margin-bottom: 20px;
+
+        color: #073b73;
+
+        font-size: 20px;
+      }
+
+      /* =====================================================
+           FLIGHT SUMMARY
+        ===================================================== */
+
+      .flight-summary {
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        gap: 20px;
+      }
+
+      .flight-airline {
+        display: flex;
+
+        align-items: center;
+
+        gap: 12px;
+      }
+
+      .flight-airline img {
+        width: 70px;
+        height: 40px;
+
+        object-fit: contain;
+      }
+
+      .flight-airline strong {
+        display: block;
+
+        color: #073b73;
+
+        font-size: 17px;
+      }
+
+      .flight-airline span {
+        color: #7b8b99;
+
+        font-size: 13px;
+      }
+
+      .flight-route {
+        display: flex;
+
+        align-items: center;
+
+        gap: 15px;
+      }
+
+      .airport {
+        text-align: center;
+      }
+
+      .airport strong {
+        display: block;
+
+        color: #073b73;
+
+        font-size: 25px;
+      }
+
+      .airport span {
+        display: block;
+
+        margin-top: 4px;
+
+        color: #64748b;
+
+        font-size: 12px;
+      }
+
+      .route-arrow {
+        color: #43a940;
+
+        font-size: 22px;
+      }
+
+      /* =====================================================
+           FORM
+        ===================================================== */
+
+      .form-grid {
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+
+        gap: 17px;
+      }
+
+      .form-group {
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 7px;
+      }
+
+      .form-group.full {
+        grid-column: 1 / -1;
+      }
+
+      .form-group label {
+        color: #18324a;
+
+        font-size: 13px;
+
+        font-weight: 700;
+      }
+
+      .form-group input,
+      .form-group select {
+        width: 100%;
+
+        padding: 12px 13px;
+
+        border: 1px solid #ccd8e3;
+
+        border-radius: 9px;
+
+        outline: none;
+
+        background: #f9fbfd;
+
+        color: #18324a;
+
+        font-size: 14px;
+
+        transition:
+          border 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+
+      .form-group input:focus,
+      .form-group select:focus {
+        border-color: #0874c9;
+
+        background: white;
+
+        box-shadow: 0 0 0 3px rgba(8, 116, 201, 0.1);
+      }
+
+      /* =====================================================
+           PASSENGERS
+        ===================================================== */
+
+      .passenger-count {
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        padding: 15px;
+
+        border: 1px solid #e1e8ef;
+
+        border-radius: 12px;
+
+        background: #f8fafc;
+      }
+
+      .passenger-info strong {
+        display: block;
+
+        color: #18324a;
+      }
+
+      .passenger-info span {
+        color: #8a99a7;
+
+        font-size: 12px;
+      }
+
+      .counter {
+        display: flex;
+
+        align-items: center;
+
+        gap: 12px;
+      }
+
+      .counter button {
+        width: 32px;
+        height: 32px;
+
+        border: none;
+
+        border-radius: 50%;
+
+        color: white;
+
+        background: #0874c9;
+
+        font-size: 18px;
+
+        cursor: pointer;
+      }
+
+      .counter strong {
+        min-width: 20px;
+
+        text-align: center;
+      }
+
+      /* =====================================================
+           EXTRAS
+        ===================================================== */
+
+      .extra-row {
+        display: grid;
+
+        grid-template-columns: 1fr auto;
+
+        align-items: center;
+
+        gap: 15px;
+
+        padding: 15px 0;
+
+        border-bottom: 1px solid #edf1f5;
+      }
+
+      .extra-row:last-child {
+        border-bottom: none;
+      }
+
+      .extra-info strong {
+        display: block;
+
+        margin-bottom: 3px;
+
+        color: #18324a;
+      }
+
+      .extra-info span {
+        color: #7b8b99;
+
+        font-size: 12px;
+      }
+
+      .extra-control {
+        min-width: 130px;
+
+        padding: 9px 10px;
+
+        border: 1px solid #ccd8e3;
+
+        border-radius: 8px;
+
+        background: white;
+
+        cursor: pointer;
+      }
+
+      /* =====================================================
+           PAYMENT METHODS
+        ===================================================== */
+
+      .payment-methods {
+        display: grid;
+
+        grid-template-columns: repeat(3, 1fr);
+
+        gap: 10px;
+
+        margin-bottom: 20px;
+      }
+
+      .payment-method {
+        padding: 13px 8px;
+
+        border: 1px solid #d8e1e9;
+
+        border-radius: 10px;
+
+        background: white;
+
+        color: #52687c;
+
+        font-size: 12px;
+
+        font-weight: 700;
+
+        cursor: pointer;
+
+        transition:
+          border 0.2s ease,
+          background 0.2s ease,
+          color 0.2s ease;
+      }
+
+      .payment-method.active {
+        border-color: #0874c9;
+
+        background: #eef7ff;
+
+        color: #0874c9;
+      }
+
+      .payment-panel {
+        display: none;
+      }
+
+      .payment-panel.active {
+        display: block;
+      }
+
+      /* =====================================================
+           CARD PAYMENT
+        ===================================================== */
+
+      .card-brands {
+        display: flex;
+
+        gap: 7px;
+
+        margin-bottom: 15px;
+      }
+
+      .brand {
+        padding: 5px 8px;
+
+        border: 1px solid #dce4eb;
+
+        border-radius: 5px;
+
+        color: #64748b;
+
+        font-size: 10px;
+
+        font-weight: 800;
+      }
+
+      .payment-grid {
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+
+        gap: 15px;
+      }
+
+      /* =====================================================
+           UPI
+        ===================================================== */
+
+      .upi-box {
+        padding: 15px;
+
+        border: 1px solid #e1e8ef;
+
+        border-radius: 10px;
+
+        background: #f8fafc;
+      }
+
+      .upi-box input {
+        width: 100%;
+
+        padding: 12px;
+
+        border: 1px solid #ccd8e3;
+
+        border-radius: 8px;
+
+        outline: none;
+      }
+
+      /* =====================================================
+           QR
+        ===================================================== */
+
+      .qr-payment {
+        text-align: center;
+      }
+
+      .fake-qr {
+        width: 170px;
+        height: 170px;
+
+        margin: 10px auto 15px;
+
+        padding: 10px;
+
+        border: 7px solid white;
+
+        outline: 1px solid #dce4eb;
+
+        background: repeating-linear-gradient(
+          45deg,
+          #111 0,
+          #111 4px,
+          white 4px,
+          white 8px
+        );
+      }
+
+      .qr-payment p {
+        color: #64748b;
+
+        font-size: 12px;
+      }
+
+      /* =====================================================
+           NET BANKING / WALLET
+        ===================================================== */
+
+      .wide-select {
+        width: 100%;
+
+        padding: 13px;
+
+        border: 1px solid #ccd8e3;
+
+        border-radius: 9px;
+
+        background: white;
+      }
+
+      /* =====================================================
+           VOUCHER
+        ===================================================== */
+
+      .voucher-row {
+        display: flex;
+
+        gap: 10px;
+      }
+
+      .voucher-row input {
+        flex: 1;
+
+        padding: 12px;
+
+        border: 1px solid #ccd8e3;
+
+        border-radius: 8px;
+
+        outline: none;
+      }
+
+      .voucher-row button {
+        padding: 0 18px;
+
+        border: none;
+
+        border-radius: 8px;
+
+        color: white;
+
+        background: #073b73;
+
+        font-weight: 700;
+
+        cursor: pointer;
+      }
+
+      /* =====================================================
+           ORDER SUMMARY
+        ===================================================== */
+
+      .summary-card {
+        position: sticky;
+
+        top: 100px;
+      }
+
+      .summary-flight {
+        padding-bottom: 18px;
+
+        margin-bottom: 18px;
+
+        border-bottom: 1px solid #edf1f5;
+      }
+
+      .summary-flight strong {
+        display: block;
+
+        color: #073b73;
+
+        font-size: 18px;
+      }
+
+      .summary-flight span {
+        display: block;
+
+        margin-top: 5px;
+
+        color: #64748b;
+
+        font-size: 13px;
+      }
+
+      .summary-line {
+        display: flex;
+
+        justify-content: space-between;
+
+        gap: 15px;
+
+        margin: 11px 0;
+
+        color: #64748b;
+
+        font-size: 14px;
+      }
+
+      .summary-line strong {
+        color: #18324a;
+      }
+
+      .summary-total {
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        margin-top: 20px;
+
+        padding-top: 18px;
+
+        border-top: 2px solid #e6edf3;
+      }
+
+      .summary-total span {
+        color: #073b73;
+
+        font-size: 15px;
+
+        font-weight: 700;
+      }
+
+      .summary-total strong {
+        color: #0874c9;
+
+        font-size: 26px;
+      }
+
+      /* =====================================================
+           PAY BUTTON
+        ===================================================== */
+
+      .pay-button {
+        width: 100%;
+
+        margin-top: 20px;
+
+        padding: 15px;
+
+        border: none;
+
+        border-radius: 11px;
+
+        color: white;
+
+        background: linear-gradient(135deg, #0874c9, #43a940);
+
+        font-size: 16px;
+
+        font-weight: 800;
+
+        cursor: pointer;
+
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+
+      .pay-button:hover {
+        transform: translateY(-2px);
+
+        box-shadow: 0 10px 25px rgba(8, 116, 201, 0.25);
+      }
+
+      .pay-button:disabled {
+        opacity: 0.65;
+
+        cursor: not-allowed;
+
+        transform: none;
+      }
+
+      .secure-text {
+        margin-top: 12px;
+
+        color: #7b8b99;
+
+        font-size: 11px;
+
+        text-align: center;
+      }
+
+      /* =====================================================
+           SUCCESS MODAL
+        ===================================================== */
+
+      .modal {
+        position: fixed;
+
+        inset: 0;
+
+        z-index: 5000;
+
+        display: none;
+
+        align-items: center;
+
+        justify-content: center;
+
+        padding: 20px;
+
+        background: rgba(3, 20, 38, 0.72);
+
+        backdrop-filter: blur(5px);
+      }
+
+      .modal.show {
+        display: flex;
+      }
+
+      .modal-box {
+        width: 100%;
+
+        max-width: 520px;
+
+        max-height: 90vh;
+
+        overflow-y: auto;
+
+        padding: 30px;
+
+        border-radius: 20px;
+
+        background: white;
+
+        box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
+
+        text-align: center;
+      }
+
+      .success-icon {
+        width: 70px;
+        height: 70px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        margin: 0 auto 15px;
+
+        border-radius: 50%;
+
+        color: white;
+
+        background: #43a940;
+
+        font-size: 35px;
+      }
+
+      .modal-box h2 {
+        margin-bottom: 8px;
+
+        color: #073b73;
+      }
+
+      .modal-box > p {
+        margin-bottom: 20px;
+
+        color: #64748b;
+
+        font-size: 14px;
+      }
+
+      .booking-ticket {
+        padding: 20px;
+
+        border: 1px dashed #b8c6d3;
+
+        border-radius: 12px;
+
+        background: #f8fafc;
+
+        text-align: left;
+      }
+
+      .ticket-row {
+        display: flex;
+
+        justify-content: space-between;
+
+        gap: 15px;
+
+        margin: 9px 0;
+
+        font-size: 13px;
+      }
+
+      .ticket-row span {
+        color: #64748b;
+      }
+
+      .ticket-row strong {
+        color: #18324a;
+
+        text-align: right;
+      }
+
+      .pnr {
+        margin: 15px 0;
+
+        padding: 13px;
+
+        border-radius: 10px;
+
+        color: #073b73;
+
+        background: #eaf4ff;
+
+        text-align: center;
+      }
+
+      .pnr span {
+        display: block;
+
+        margin-bottom: 5px;
+
+        font-size: 11px;
+
+        font-weight: 700;
+
+        letter-spacing: 2px;
+      }
+
+      .pnr strong {
+        font-size: 25px;
+
+        letter-spacing: 4px;
+      }
+
+      .close-modal {
+        width: 100%;
+
+        margin-top: 20px;
+
+        padding: 13px;
+
+        border: none;
+
+        border-radius: 9px;
+
+        color: white;
+
+        background: #073b73;
+
+        font-weight: 700;
+
+        cursor: pointer;
+      }
+
+      /* =====================================================
+           PROCESSING
+        ===================================================== */
+
+      .processing {
+        position: fixed;
+
+        inset: 0;
+
+        z-index: 6000;
+
+        display: none;
+
+        align-items: center;
+
+        justify-content: center;
+
+        background: rgba(255, 255, 255, 0.94);
+      }
+
+      .processing.show {
+        display: flex;
+      }
+
+      .processing-box {
+        text-align: center;
+      }
+
+      .spinner {
+        width: 55px;
+        height: 55px;
+
+        margin: 0 auto 20px;
+
+        border: 5px solid #dce8f1;
+
+        border-top-color: #0874c9;
+
+        border-radius: 50%;
+
+        animation: spin 0.8s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .processing-box h2 {
+        margin-bottom: 8px;
+
+        color: #073b73;
+      }
+
+      .processing-box p {
+        color: #64748b;
+
+        font-size: 13px;
+      }
+
+      /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+      @media (max-width: 950px) {
+        .checkout-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .summary-card {
+          position: static;
+        }
+      }
+
+      @media (max-width: 600px) {
+        nav {
+          padding: 10px 15px;
+
+          gap: 12px;
+
+          flex-wrap: wrap;
+
+          justify-content: center;
+        }
+
+        nav img {
+          width: 80px;
+          height: 40px;
+        }
+
+        nav a {
+          font-size: 12px;
+        }
+
+        .page {
+          padding: 25px 15px 60px;
+        }
+
+        .coupon-offer {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .coupon-offer-code {
+          text-align: left;
+        }
+
+        .card {
+          padding: 18px;
+        }
+
+        .flight-summary {
+          flex-direction: column;
+
+          align-items: flex-start;
+        }
+
+        .flight-route {
+          width: 100%;
+
+          justify-content: center;
+        }
+
+        .form-grid,
+        .payment-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .form-group.full {
+          grid-column: auto;
+        }
+
+        .payment-methods {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .extra-row {
+          grid-template-columns: 1fr;
+        }
+
+        .extra-control {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header>
+      <nav>
+        <img src="airline_logo.png" alt="AK AIR" />
+
+        <a href="Airline.html"> Home </a>
+
+        <a href="airline_search.html"> Flights </a>
+
+        <a href="Airline.html#about"> About </a>
+
+        <a href="Airline.html#contact"> Contact </a>
+      </nav>
+    </header>
+
+    <!-- =====================================================
+         DEMO NOTICE
+    ====================================================== -->
+
+    <div class="demo-banner">
+      ⚠️ AK AIR DEMO CHECKOUT — This is a fictional payment gateway. No real
+      money will be charged.
+    </div>
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="page">
+      <h1 class="page-title">Complete Your Booking</h1>
+      <section class="coupon-offer" aria-label="Current AK AIR coupon">
+        <div>
+          <h2>Limited-time random coupon</h2>
+          <p><strong data-coupon-percent></strong>% off base fare and passenger fare.</p>
+        </div>
+        <div class="coupon-offer-code">
+          <p>Use code <strong data-coupon-code>------</strong></p>
+          <p>Refreshes in <time data-coupon-timer>--:--:--</time></p>
+        </div>
+      </section>
+
+      <p class="page-subtitle">
+        Review your flight, add extras and complete the demo payment.
+      </p>
+
+      <div class="checkout-layout">
+        <!-- =================================================
+                 LEFT COLUMN
+            ================================================== -->
+
+        <div class="left-column">
+          <!-- FLIGHT -->
+
+          <section class="card">
+            <h2 class="card-title">✈️ Your Flight</h2>
+
+            <div class="flight-summary" id="flight-summary">
+              <!-- JavaScript -->
+            </div>
+          </section>
+
+          <!-- PASSENGER -->
+
+          <section class="card">
+            <h2 class="card-title">👤 Passenger Details</h2>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label> First Name </label>
+
+                <input id="firstName" type="text" placeholder="First name" />
+              </div>
+
+              <div class="form-group">
+                <label> Last Name </label>
+
+                <input id="lastName" type="text" placeholder="Last name" />
+              </div>
+
+              <div class="form-group">
+                <label> Email </label>
+
+                <input id="email" type="email" placeholder="you@example.com" />
+              </div>
+
+              <div class="form-group">
+                <label> Phone </label>
+
+                <input id="phone" type="tel" placeholder="+91 98765 43210" />
+              </div>
+
+              <div class="form-group">
+                <label> Date of Birth </label>
+
+                <input id="dob" type="date" />
+              </div>
+
+              <div class="form-group">
+                <label> Nationality </label>
+
+                <select id="nationality">
+                  <option value="">Select nationality</option>
+
+                  <option>Indian</option>
+
+                  <option>Kazakhstan</option>
+
+                  <option>United Arab Emirates</option>
+
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+          </section>
+
+          <!-- PASSENGERS -->
+
+          <section class="card">
+            <h2 class="card-title">👥 Passengers</h2>
+
+            <div class="passenger-count">
+              <div class="passenger-info">
+                <strong> Adults </strong>
+
+                <span> 12 years and above </span>
+              </div>
+
+              <div class="counter">
+                <button type="button" id="minusPassenger">−</button>
+
+                <strong id="passengerCount"> 1 </strong>
+
+                <button type="button" id="plusPassenger">+</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- EXTRAS -->
+
+          <section class="card">
+            <h2 class="card-title">🧳 Extras</h2>
+
+            <!-- SEAT -->
+
+            <div class="extra-row">
+              <div class="extra-info">
+                <strong> Seat Selection </strong>
+
+                <span> Choose your preferred seat </span>
+              </div>
+
+              <select class="extra-control" id="seat">
+                <option value="0">Standard — Free</option>
+
+                <option value="500">Window — ₹500</option>
+
+                <option value="500">Aisle — ₹500</option>
+
+                <option value="900">Extra Legroom — ₹900</option>
+              </select>
+            </div>
+
+            <!-- BAGGAGE -->
+
+            <div class="extra-row">
+              <div class="extra-info">
+                <strong> Checked Baggage </strong>
+
+                <span> Additional baggage allowance </span>
+              </div>
+
+              <select class="extra-control" id="baggage">
+                <option value="0">15 kg — Included</option>
+
+                <option value="800">20 kg — ₹800</option>
+
+                <option value="1200">25 kg — ₹1,200</option>
+
+                <option value="1800">30 kg — ₹1,800</option>
+              </select>
+            </div>
+
+            <!-- MEAL -->
+
+            <div class="extra-row">
+              <div class="extra-info">
+                <strong> On-board Meal </strong>
+
+                <span> Meal served during your flight </span>
+              </div>
+
+              <select class="extra-control" id="meal">
+                <option value="0">No Meal</option>
+
+                <option value="250">Vegetarian — ₹250</option>
+
+                <option value="350">Non-Vegetarian — ₹350</option>
+
+                <option value="300">Vegan — ₹300</option>
+              </select>
+            </div>
+
+            <!-- PROTECTION -->
+
+            <div class="extra-row">
+              <div class="extra-info">
+                <strong> Travel Protection </strong>
+
+                <span> Demo travel protection plan </span>
+              </div>
+
+              <select class="extra-control" id="insurance">
+                <option value="0">Decline</option>
+
+                <option value="499">Basic — ₹499</option>
+
+                <option value="899">Premium — ₹899</option>
+              </select>
+            </div>
+          </section>
+
+          <!-- PAYMENT -->
+
+          <section class="card">
+            <h2 class="card-title">💳 Payment</h2>
+
+            <div class="payment-methods">
+              <button
+                type="button"
+                class="payment-method active"
+                data-method="card"
+              >
+                💳 Card
+              </button>
+
+              <button type="button" class="payment-method" data-method="upi">
+                📱 UPI
+              </button>
+
+              <button type="button" class="payment-method" data-method="qr">
+                📷 QR
+              </button>
+
+              <button type="button" class="payment-method" data-method="bank">
+                🏦 Net Banking
+              </button>
+
+              <button type="button" class="payment-method" data-method="wallet">
+                👛 Wallet
+              </button>
+
+              <button
+                type="button"
+                class="payment-method"
+                data-method="voucher"
+              >
+                🎁 Voucher
+              </button>
+            </div>
+
+            <!-- CARD PANEL -->
+
+            <div class="payment-panel active" id="panel-card">
+              <div class="card-brands">
+                <span class="brand"> VISA </span>
+
+                <span class="brand"> Mastercard </span>
+
+                <span class="brand"> RuPay </span>
+              </div>
+
+              <div class="form-grid">
+                <div class="form-group full">
+                  <label> Card Number </label>
+
+                  <input
+                    id="cardNumber"
+                    type="text"
+                    maxlength="19"
+                    placeholder="1234 5678 9012 3456"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label> Cardholder Name </label>
+
+                  <input id="cardName" type="text" placeholder="Name on card" />
+                </div>
+
+                <div class="form-group">
+                  <label> CVV </label>
+
+                  <input
+                    id="cvv"
+                    type="password"
+                    maxlength="4"
+                    placeholder="•••"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label> Expiry </label>
+
+                  <input
+                    id="expiry"
+                    type="text"
+                    maxlength="5"
+                    placeholder="MM/YY"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- UPI PANEL -->
+
+            <div class="payment-panel" id="panel-upi">
+              <div class="upi-box">
+                <label> UPI ID </label>
+
+                <input id="upiId" type="text" placeholder="example@upi" />
+              </div>
+            </div>
+
+            <!-- QR PANEL -->
+
+            <div class="payment-panel" id="panel-qr">
+              <div class="qr-payment">
+                <div class="fake-qr"></div>
+
+                <p>Scan this DEMO QR using any UPI app.</p>
+              </div>
+            </div>
+
+            <!-- BANK PANEL -->
+
+            <div class="payment-panel" id="panel-bank">
+              <select class="wide-select" id="bank">
+                <option value="">Select your bank</option>
+
+                <option>State Bank of India</option>
+
+                <option>HDFC Bank</option>
+
+                <option>ICICI Bank</option>
+
+                <option>Axis Bank</option>
+
+                <option>Kotak Mahindra Bank</option>
+              </select>
+            </div>
+
+            <!-- WALLET PANEL -->
+
+            <div class="payment-panel" id="panel-wallet">
+              <select class="wide-select" id="wallet">
+                <option value="">Select wallet</option>
+
+                <option>Paytm</option>
+
+                <option>PhonePe</option>
+
+                <option>Amazon Pay</option>
+              </select>
+            </div>
+
+            <!-- VOUCHER PANEL -->
+
+            <div class="payment-panel" id="panel-voucher">
+              <div class="voucher-row">
+                <input
+                  id="voucher"
+                  type="text"
+                  placeholder="Enter the code shown above"
+                />
+
+                <button type="button" id="applyVoucher">Apply</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- TERMS -->
+
+          <section class="card">
+            <label
+              style="
+                display: flex;
+                gap: 10px;
+                align-items: flex-start;
+                font-size: 13px;
+                color: #64748b;
+              "
+            >
+              <input type="checkbox" id="terms" style="margin-top: 3px" />
+
+              <span>
+                I agree to the AK AIR demo booking conditions and understand
+                that this is a fictional payment environment.
+              </span>
+            </label>
+          </section>
+        </div>
+
+        <!-- =================================================
+                 RIGHT COLUMN
+            ================================================== -->
+
+        <aside class="right-column">
+          <section class="card summary-card">
+            <h2 class="card-title">💰 Price Summary</h2>
+
+            <div class="summary-flight" id="summary-flight">
+              <!-- JS -->
+            </div>
+
+            <div class="summary-line">
+              <span> Base fare </span>
+
+              <strong id="baseFare"> ₹0 </strong>
+            </div>
+
+            <div class="summary-line">
+              <span> Passenger </span>
+
+              <strong id="passengerFare"> ₹0 </strong>
+            </div>
+
+            <div class="summary-line">
+              <span> Seat </span>
+
+              <strong id="seatFare"> ₹0 </strong>
+            </div>
+
+            <div class="summary-line">
+              <span> Baggage </span>
+
+              <strong id="baggageFare"> ₹0 </strong>
+            </div>
+
+            <div class="summary-line">
+              <span> Meal </span>
+
+              <strong id="mealFare"> ₹0 </strong>
+            </div>
+
+            <div class="summary-line">
+              <span> Protection </span>
+
+              <strong id="insuranceFare"> ₹0 </strong>
+            </div>
+
+            <div class="summary-line">
+              <span> Taxes & fees </span>
+
+              <strong id="taxFare"> ₹0 </strong>
+            </div>
+
+            <div class="summary-line">
+              <span> Discount </span>
+
+              <strong id="discountFare" style="color: #43a940"> - ₹0 </strong>
+            </div>
+
+            <div class="summary-total">
+              <span> Total </span>
+
+              <strong id="totalFare"> ₹0 </strong>
+            </div>
+
+            <button type="button" class="pay-button" id="payButton">
+              Pay ₹0
+            </button>
+
+            <p class="secure-text">
+              🔒 DEMO SECURE PAYMENT · No real transaction
+            </p>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <!-- =====================================================
+         PROCESSING SCREEN
+    ====================================================== -->
+
+    <div class="processing" id="processing">
+      <div class="processing-box">
+        <div class="spinner"></div>
+
+        <h2>Processing Demo Payment</h2>
+
+        <p>Connecting to AK AIR Demo Payment Gateway...</p>
+      </div>
+    </div>
+
+    <!-- =====================================================
+         SUCCESS MODAL
+    ====================================================== -->
+
+    <div class="modal" id="successModal">
+      <div class="modal-box">
+        <div class="success-icon">✓</div>
+
+        <h2>Booking Confirmed!</h2>
+
+        <p>Your AK AIR demo booking has been successfully created.</p>
+
+        <div class="booking-ticket">
+          <div class="pnr">
+            <span> BOOKING REFERENCE / PNR </span>
+
+            <strong id="pnr"> AKXXXX </strong>
+          </div>
+
+          <div class="ticket-row">
+            <span> Flight </span>
+
+            <strong id="ticketFlight"> AK001 </strong>
+          </div>
+
+          <div class="ticket-row">
+            <span> Route </span>
+
+            <strong id="ticketRoute"> COK → ALA </strong>
+          </div>
+
+          <div class="ticket-row">
+            <span> Passenger </span>
+
+            <strong id="ticketPassenger"> Demo Passenger </strong>
+          </div>
+
+          <div class="ticket-row">
+            <span> Date </span>
+
+            <strong id="ticketDate"> 18 Aug 2026 </strong>
+          </div>
+
+          <div class="ticket-row">
+            <span> Seat </span>
+
+            <strong id="ticketSeat"> Assigned </strong>
+          </div>
+
+          <div class="ticket-row">
+            <span> Payment </span>
+
+            <strong> DEMO SUCCESS </strong>
+          </div>
+
+          <div class="ticket-row">
+            <span> Amount Paid </span>
+
+            <strong id="ticketAmount"> ₹0 </strong>
+          </div>
+
+          <div class="ticket-row">
+            <span> Transaction ID </span>
+
+            <strong id="transactionId"> AK-DEMO-000000 </strong>
+          </div>
+        </div>
+
+        <button type="button" class="close-modal" id="closeModal">Done</button>
+      </div>
+    </div>
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+        <script src="coupons.js"></script>
+    <script>
+      /* =====================================================
+           FLIGHT DATABASE
+        ===================================================== */
+
+      const flights = [
+        {
+          flightNo: "AK001",
+          aircraft: "Boeing 737",
+          from: "Kochi",
+          fromCode: "COK",
+          to: "Almaty",
+          toCode: "ALA",
+          departTime: "09:15",
+          arriveTime: "15:55",
+          duration: "6h 40m",
+          stops: "Direct",
+          price: 18499,
+        },
+
+        {
+          flightNo: "AK002",
+          aircraft: "ATR 42",
+          from: "Kochi",
+          fromCode: "COK",
+          to: "Thiruvananthapuram",
+          toCode: "TRV",
+          departTime: "10:00",
+          arriveTime: "10:50",
+          duration: "50m",
+          stops: "Direct",
+          price: 3999,
+        },
+        {
+          flightNo: "AK003",
+          aircraft: "ATR 42",
+          from: "Thiruvananthapuram",
+          fromCode: "TRV",
+          to: "Kochi",
+          toCode: "COK",
+          departTime: "10:00",
+          arriveTime: "10:50",
+          duration: "50m",
+          stops: "Direct",
+          price: 3999,
+        },
+        {
+          flightNo: "AK004",
+          aircraft: "A380",
+          from: "Kuttippuram",
+          fromCode: "KTT",
+          to: "Pallipuram",
+          toCode: "PLP",
+          departTime: "09:00",
+          arriveTime: "09:10",
+          duration: "10m",
+          stops: "Direct",
+          price: 459,
+        },
+        {
+          flightNo: "AK005",
+          aircraft: "A380",
+          from: "Pallipuram",
+          fromCode: "PLP",
+          to: "Kuttippuram",
+          toCode: "KTT",
+          departTime: "09:00",
+          arriveTime: "09:10",
+          duration: "10m",
+          stops: "Direct",
+          price: 459,
+        },
+        {
+          flightNo: "AK006",
+          aircraft: "A380",
+          from: "Kochi",
+          fromCode: "COK",
+          to: "Pallipuram",
+          toCode: "PLP",
+          departTime: "10:50",
+          arriveTime: "11:20",
+          duration: "30m",
+          stops: "Direct",
+          price: 2999,
+        },
+      ];
+
+      /* =====================================================
+           URL
+        ===================================================== */
+
+      const params = new URLSearchParams(window.location.search);
+      const storedBooking = (() => {
+        try {
+          return JSON.parse(
+            localStorage.getItem("akairSelectedFlight") || "null",
+          );
+        } catch (error) {
+          return null;
+        }
+      })();
+
+      const flightNumber =
+        params.get("flight") || storedBooking?.flightNo || "AK001";
+      const departureDate =
+        params.get("DepartureDate") || storedBooking?.date || "";
+
+      const selectedFlight =
+        flights.find((flight) => flight.flightNo === flightNumber) ||
+        flights.find((flight) => flight.flightNo === storedBooking?.flightNo) ||
+        flights[0];
+
+      /* =====================================================
+           PASSENGERS
+        ===================================================== */
+
+      let passengers = 1;
+
+      /* =====================================================
+           VOUCHER
+        ===================================================== */
+
+      let voucherDiscount = 0;
+
+      /* =====================================================
+           PAYMENT METHOD
+        ===================================================== */
+
+      let paymentMethod = "card";
+
+      /* =====================================================
+           HELPERS
+        ===================================================== */
+
+      function money(amount) {
+        return "₹" + Math.round(amount).toLocaleString("en-IN");
+      }
+
+      function formatDate(date) {
+        if (!date) {
+          return "Select a departure date";
+        }
+
+        const d = new Date(date + "T00:00:00");
+
+        return d.toLocaleDateString("en-IN", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        });
+      }
+      /* =====================================================
+           FLIGHT DISPLAY
+        ===================================================== */
+
+      document.getElementById("flight-summary").innerHTML = `
+
+            <div class="flight-airline">
+
+                <img
+                    src="airline_logo.png"
+                    alt="AK AIR"
+                >
+
+                <div>
+
+                    <strong>
+                        AK AIR
+                    </strong>
+
+                    <span>
+                        ${selectedFlight.flightNo}
+                        ·
+                        ${selectedFlight.aircraft}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="flight-route">
+
+                <div class="airport">
+
+                    <strong>
+                        ${selectedFlight.fromCode}
+                    </strong>
+
+                    <span>
+                        ${selectedFlight.departTime}
+                    </span>
+
+                </div>
+
+
+                <div class="route-arrow">
+                    →
+                </div>
+
+
+                <div class="airport">
+
+                    <strong>
+                        ${selectedFlight.toCode}
+                    </strong>
+
+                    <span>
+                        ${selectedFlight.arriveTime}
+                    </span>
+
+                </div>
+
+            </div>
+
+        `;
+
+      document.getElementById("summary-flight").innerHTML = `
+
+            <strong>
+                ${selectedFlight.flightNo}
+                ·
+                ${selectedFlight.fromCode}
+                →
+                ${selectedFlight.toCode}
+            </strong>
+
+            <span>
+                ${formatDate(departureDate)}
+                ·
+                ${selectedFlight.departTime}
+                –
+                ${selectedFlight.arriveTime}
+            </span>
+
+            <span>
+                ${selectedFlight.aircraft}
+                ·
+                ${selectedFlight.duration}
+                ·
+                ${selectedFlight.stops}
+            </span>
+
+        `;
+
+      /* =====================================================
+           CALCULATE TOTAL
+        ===================================================== */
+
+      function calculateTotal() {
+        const baseFare = selectedFlight.price;
+
+        const passengerFare = baseFare * (passengers - 1);
+
+        const seatFare =
+          Number(document.getElementById("seat").value) * passengers;
+
+        const baggageFare =
+          Number(document.getElementById("baggage").value) * passengers;
+
+        const mealFare =
+          Number(document.getElementById("meal").value) * passengers;
+
+        const insuranceFare =
+          Number(document.getElementById("insurance").value) * passengers;
+
+        const subtotal =
+          baseFare +
+          passengerFare +
+          seatFare +
+          baggageFare +
+          mealFare +
+          insuranceFare;
+
+        /*
+                Demo tax calculation.
+                12% of subtotal.
+            */
+
+        const tax = Math.round(subtotal * 0.12);
+
+        const totalBeforeDiscount = subtotal + tax;
+
+        const total = Math.max(0, totalBeforeDiscount - voucherDiscount);
+
+        return {
+          baseFare,
+
+          passengerFare,
+
+          seatFare,
+
+          baggageFare,
+
+          mealFare,
+
+          insuranceFare,
+
+          tax,
+
+          total,
+        };
+      }
+
+      /* =====================================================
+           UPDATE SUMMARY
+        ===================================================== */
+
+      function updateSummary() {
+        const price = calculateTotal();
+
+        document.getElementById("baseFare").textContent = money(price.baseFare);
+
+        document.getElementById("passengerFare").textContent = money(
+          price.passengerFare,
+        );
+
+        document.getElementById("seatFare").textContent = money(price.seatFare);
+
+        document.getElementById("baggageFare").textContent = money(
+          price.baggageFare,
+        );
+
+        document.getElementById("mealFare").textContent = money(price.mealFare);
+
+        document.getElementById("insuranceFare").textContent = money(
+          price.insuranceFare,
+        );
+
+        document.getElementById("taxFare").textContent = money(price.tax);
+
+        document.getElementById("discountFare").textContent =
+          "- " + money(voucherDiscount);
+
+        document.getElementById("totalFare").textContent = money(price.total);
+
+        document.getElementById("payButton").textContent =
+          "Pay " + money(price.total);
+      }
+
+      /* =====================================================
+           EXTRA LISTENERS
+        ===================================================== */
+
+      ["seat", "baggage", "meal", "insurance"].forEach((id) => {
+        document.getElementById(id).addEventListener("change", updateSummary);
+      });
+
+      /* =====================================================
+           PASSENGER COUNTER
+        ===================================================== */
+
+      document
+        .getElementById("minusPassenger")
+        .addEventListener("click", () => {
+          if (passengers > 1) {
+            passengers--;
+
+            document.getElementById("passengerCount").textContent = passengers;
+
+            updateSummary();
+          }
+        });
+
+      document.getElementById("plusPassenger").addEventListener("click", () => {
+        if (passengers < 9) {
+          passengers++;
+
+          document.getElementById("passengerCount").textContent = passengers;
+
+          updateSummary();
+        }
+      });
+
+      /* =====================================================
+           PAYMENT TABS
+        ===================================================== */
+
+      document.querySelectorAll(".payment-method").forEach((button) => {
+        button.addEventListener("click", () => {
+          document
+            .querySelectorAll(".payment-method")
+            .forEach((item) => item.classList.remove("active"));
+
+          button.classList.add("active");
+
+          paymentMethod = button.dataset.method;
+
+          document
+            .querySelectorAll(".payment-panel")
+            .forEach((panel) => panel.classList.remove("active"));
+
+          document
+            .getElementById("panel-" + paymentMethod)
+            .classList.add("active");
+        });
+      });
+
+      /* =====================================================
+           VOUCHER
+        ===================================================== */
+
+      document.getElementById("applyVoucher").addEventListener("click", () => {
+        const code = document
+          .getElementById("voucher")
+          .value.trim()
+          .toUpperCase();
+        const activeCoupon = window.AKAIRCoupon.getActiveCoupon();
+
+        /*
+                    DEMO PROMO CODES
+                */
+
+        if (code === activeCoupon.code) {
+          const price = calculateTotal();
+
+          voucherDiscount = Math.round(
+            (price.baseFare + price.passengerFare) * (activeCoupon.discount / 100),
+          );
+
+          alert(
+            `Random demo coupon applied: ${activeCoupon.discount}% off base fare and passenger fare.`,
+          );
+        } else if (code === "AKAIR10") {
+          const price = calculateTotal();
+
+          voucherDiscount = Math.round(
+            (price.baseFare + price.passengerFare) * 0.1,
+          );
+
+          alert("Demo voucher applied: 10% off base fare.");
+        } else if (code === "GANDHI30") {
+          const price = calculateTotal();
+
+          voucherDiscount = Math.round(
+            (price.baseFare + price.passengerFare) * 0.3,
+          );
+
+          alert(
+            "Gandhi Jayanti offer applied: 30% off base fare and passenger fare.",
+          );
+        } else {
+          voucherDiscount = 0;
+
+          alert(
+            `Invalid demo voucher.\n\nTry ${activeCoupon.code}, GANDHI30, or AKAIR10.`,
+          );
+        }
+
+        updateSummary();
+      });
+
+      /* =====================================================
+           CARD NUMBER FORMATTING
+        ===================================================== */
+
+      document
+        .getElementById("cardNumber")
+        .addEventListener("input", (event) => {
+          let value = event.target.value.replace(/\D/g, "").slice(0, 16);
+
+          value = value.replace(/(.{4})/g, "$1 ").trim();
+
+          event.target.value = value;
+        });
+
+      /* =====================================================
+           EXPIRY FORMATTING
+        ===================================================== */
+
+      document.getElementById("expiry").addEventListener("input", (event) => {
+        let value = event.target.value.replace(/\D/g, "").slice(0, 4);
+
+        if (value.length > 2) {
+          value = value.slice(0, 2) + "/" + value.slice(2);
+        }
+
+        event.target.value = value;
+      });
+
+      /* =====================================================
+           GENERATE PNR
+        ===================================================== */
+
+      function generatePNR() {
+        const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+        let pnr = "";
+
+        for (let i = 0; i < 6; i++) {
+          pnr += chars[Math.floor(Math.random() * chars.length)];
+        }
+
+        return pnr;
+      }
+
+      /* =====================================================
+           GENERATE TRANSACTION ID
+        ===================================================== */
+
+      function generateTransactionID() {
+        return "AK-DEMO-" + Date.now().toString().slice(-8);
+      }
+
+      /* =====================================================
+           PAYMENT
+        ===================================================== */
+
+      document.getElementById("payButton").addEventListener("click", () => {
+        const firstName = document.getElementById("firstName").value.trim();
+
+        const lastName = document.getElementById("lastName").value.trim();
+
+        const email = document.getElementById("email").value.trim();
+
+        const terms = document.getElementById("terms").checked;
+
+        if (!firstName || !lastName || !email) {
+          alert("Please enter the passenger's name and email.");
+
+          return;
+        }
+
+        if (!terms) {
+          alert("Please accept the demo booking conditions.");
+
+          return;
+        }
+
+        /*
+                    Basic fake payment validation.
+                    No real card or bank connection occurs.
+                */
+
+        if (paymentMethod === "card") {
+          const card = document
+            .getElementById("cardNumber")
+            .value.replace(/\s/g, "");
+
+          if (card.length < 12) {
+            alert("Enter a demo card number.");
+
+            return;
+          }
+        }
+
+        if (paymentMethod === "upi") {
+          const upi = document.getElementById("upiId").value.trim();
+
+          if (!upi) {
+            alert("Enter a demo UPI ID.");
+
+            return;
+          }
+        }
+
+        if (paymentMethod === "bank") {
+          if (!document.getElementById("bank").value) {
+            alert("Select a demo bank.");
+
+            return;
+          }
+        }
+
+        if (paymentMethod === "wallet") {
+          if (!document.getElementById("wallet").value) {
+            alert("Select a demo wallet.");
+
+            return;
+          }
+        }
+
+        const payButton = document.getElementById("payButton");
+
+        payButton.disabled = true;
+
+        document.getElementById("processing").classList.add("show");
+
+        /*
+                    Fake gateway delay.
+                */
+
+        setTimeout(
+          () => {
+            document.getElementById("processing").classList.remove("show");
+
+            const price = calculateTotal();
+
+            const pnr = generatePNR();
+
+            const transaction = generateTransactionID();
+
+            document.getElementById("pnr").textContent = pnr;
+
+            document.getElementById("ticketFlight").textContent =
+              selectedFlight.flightNo;
+
+            document.getElementById("ticketRoute").textContent =
+              selectedFlight.fromCode + " → " + selectedFlight.toCode;
+
+            document.getElementById("ticketPassenger").textContent =
+              firstName + " " + lastName;
+
+            document.getElementById("ticketDate").textContent =
+              formatDate(departureDate);
+
+            document.getElementById("ticketSeat").textContent =
+              document.getElementById("seat").selectedOptions[0].textContent;
+
+            document.getElementById("ticketAmount").textContent = money(
+              price.total,
+            );
+
+            document.getElementById("transactionId").textContent = transaction;
+
+            document.getElementById("successModal").classList.add("show");
+
+            payButton.disabled = false;
+          },
+
+          2200,
+        );
+      });
+
+      /* =====================================================
+           CLOSE MODAL
+        ===================================================== */
+
+      document.getElementById("closeModal").addEventListener("click", () => {
+        document.getElementById("successModal").classList.remove("show");
+      });
+
+      /* =====================================================
+           INITIAL PRICE
+        ===================================================== */
+
+      updateSummary();
+    </script>
+  </body>
+</html>

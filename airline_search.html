@@ -1,0 +1,949 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AK AIR | Available Flights</title>
+    <style>
+      :root {
+        --navy: #0a2346;
+        --navy-soft: #153c68;
+        --blue: #1e88e5;
+        --mint: #40d7b2;
+        --green: #3ea96a;
+        --ink: #1d3153;
+        --muted: #5d738b;
+        --line: rgba(15, 46, 91, 0.12);
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        color: var(--ink);
+        background: linear-gradient(180deg, #edf4fb 0%, #fefefe 100%);
+        min-height: 100vh;
+      }
+      a {
+        text-decoration: none;
+      }
+      button,
+      input {
+        font-family: inherit;
+      }
+      .container {
+        width: min(1200px, calc(100% - 32px));
+        margin: 0 auto;
+      }
+
+      /* ---- header (matches airline.html) ---- */
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid var(--line);
+      }
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 76px;
+        gap: 20px;
+      }
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 900;
+        color: var(--navy);
+        font-size: 1.5rem;
+      }
+      .brand-logo {
+        width: 110px;
+        display: block;
+      }
+      .logo-mark {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--blue), var(--mint));
+        color: #fff;
+        font-weight: 900;
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        margin-left: auto;
+      }
+      .nav-links a {
+        color: var(--navy-soft);
+        font-weight: 700;
+        font-size: 0.92rem;
+      }
+      .nav-links a:hover,
+      .nav-links a.is-active {
+        color: var(--blue);
+      }
+      .nav-cta {
+        padding: 11px 20px;
+        border-radius: 999px;
+        color: #fff;
+        font-weight: 800;
+        font-size: 0.9rem;
+        background: linear-gradient(135deg, var(--blue), var(--mint));
+        box-shadow: 0 12px 26px rgba(30, 136, 229, 0.28);
+      }
+
+      /* ---- hero ---- */
+      .hero {
+        padding: 38px 0 28px;
+        color: #fff;
+        background: linear-gradient(
+          135deg,
+          #0a2346 0%,
+          #153c68 55%,
+          #0a2346 100%
+        );
+      }
+      .hero .eyebrow {
+        display: inline-block;
+        padding: 7px 13px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.08);
+        font-size: 0.7rem;
+        font-weight: 800;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+      .hero h1 {
+        margin-top: 14px;
+        font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+        letter-spacing: -0.04em;
+        line-height: 1.1;
+      }
+      .hero h1 .arrow {
+        color: var(--mint);
+      }
+      .hero p {
+        margin-top: 10px;
+        color: rgba(255, 255, 255, 0.75);
+        max-width: 600px;
+        line-height: 1.6;
+      }
+
+      /* ---- summary bar ---- */
+      .summary {
+        margin-top: 22px;
+        padding: 16px 20px;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+        gap: 16px;
+        align-items: center;
+        background: #fff;
+        color: var(--ink);
+        border-radius: 18px;
+        box-shadow: 0 20px 45px rgba(6, 24, 48, 0.28);
+      }
+      .summary .item span {
+        display: block;
+        margin-bottom: 3px;
+        color: var(--muted);
+        font-size: 0.64rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+      .summary .item strong {
+        display: block;
+        color: var(--navy);
+        font-size: 1.02rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .edit-btn {
+        padding: 11px 18px;
+        border: none;
+        border-radius: 11px;
+        cursor: pointer;
+        background: linear-gradient(135deg, var(--blue), var(--mint));
+        color: #fff;
+        font-weight: 800;
+        font-size: 0.86rem;
+        white-space: nowrap;
+        box-shadow: 0 12px 26px rgba(30, 136, 229, 0.28);
+      }
+
+      /* ---- results ---- */
+      main {
+        padding: 30px 0 70px;
+      }
+      .status-bar {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 18px;
+      }
+      .status-bar h2 {
+        color: var(--navy);
+        font-size: 1.5rem;
+        letter-spacing: -0.03em;
+      }
+      .status-bar .count {
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: #fff;
+        border: 1px solid var(--line);
+        color: var(--muted);
+        font-weight: 700;
+        font-size: 0.85rem;
+      }
+      .status-bar .count strong {
+        color: var(--navy);
+      }
+
+      .notice {
+        margin-bottom: 16px;
+        padding: 14px 18px;
+        background: #fff8e1;
+        border: 1px solid #ffe69c;
+        border-radius: 12px;
+        color: #664d03;
+        font-size: 0.9rem;
+        font-weight: 700;
+        line-height: 1.55;
+      }
+
+      .flight-list {
+        display: grid;
+        gap: 14px;
+      }
+      .flight-card {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 220px;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        box-shadow: 0 14px 32px rgba(17, 46, 86, 0.07);
+        overflow: hidden;
+        transition:
+          transform 0.15s,
+          box-shadow 0.15s,
+          border-color 0.15s;
+      }
+      .flight-card:hover {
+        transform: translateY(-3px);
+        border-color: rgba(30, 136, 229, 0.35);
+        box-shadow: 0 22px 48px rgba(17, 46, 86, 0.12);
+      }
+      .flight-main {
+        padding: 22px 24px;
+        display: grid;
+        grid-template-columns: 180px minmax(0, 1fr);
+        gap: 22px;
+        align-items: center;
+      }
+      .airline-block {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .airline-logo {
+        width: 60px;
+        height: 36px;
+        object-fit: contain;
+      }
+      .airline-text strong {
+        display: block;
+        color: var(--navy);
+        font-size: 0.98rem;
+      }
+      .airline-text span {
+        display: block;
+        margin-top: 3px;
+        color: var(--muted);
+        font-size: 0.74rem;
+      }
+
+      .timeline {
+        display: grid;
+        grid-template-columns: auto minmax(80px, 1fr) auto;
+        gap: 18px;
+        align-items: center;
+      }
+      .time-block strong {
+        display: block;
+        color: var(--navy);
+        font-size: 1.35rem;
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+        letter-spacing: -0.02em;
+      }
+      .time-block span {
+        display: block;
+        margin-top: 3px;
+        color: var(--muted);
+        font-size: 0.72rem;
+      }
+      .time-block.right {
+        text-align: right;
+      }
+      .path {
+        text-align: center;
+      }
+      .path-duration {
+        display: block;
+        color: var(--navy-soft);
+        font-size: 0.74rem;
+        font-weight: 800;
+      }
+      .path-track {
+        position: relative;
+        display: block;
+        height: 2px;
+        margin: 8px 0 7px;
+        border-radius: 2px;
+        background: linear-gradient(
+          90deg,
+          rgba(30, 136, 229, 0.35),
+          rgba(64, 215, 178, 0.9),
+          rgba(30, 136, 229, 0.35)
+        );
+      }
+      .path-track::before,
+      .path-track::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #fff;
+        border: 2px solid var(--blue);
+        transform: translateY(-50%);
+      }
+      .path-track::before {
+        left: -2px;
+      }
+      .path-track::after {
+        right: -2px;
+        border-color: var(--mint);
+      }
+      .path-stops {
+        color: var(--muted);
+        font-size: 0.66rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .flight-side {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: center;
+        gap: 9px;
+        padding: 22px;
+        border-left: 1px dashed var(--line);
+        background: linear-gradient(180deg, #fbfdff, #eff7ff);
+      }
+      .price strong {
+        display: block;
+        color: var(--navy);
+        font-size: 1.5rem;
+        font-variant-numeric: tabular-nums;
+        letter-spacing: -0.02em;
+      }
+      .price span {
+        display: block;
+        margin-top: 2px;
+        color: var(--muted);
+        font-size: 0.7rem;
+      }
+      .seats-pill {
+        padding: 5px 11px;
+        border-radius: 999px;
+        background: rgba(64, 215, 178, 0.14);
+        color: var(--green);
+        font-size: 0.66rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .seats-pill.low {
+        background: rgba(249, 115, 22, 0.14);
+        color: #c2410c;
+      }
+      .select-btn {
+        width: 100%;
+        padding: 12px 16px;
+        border: none;
+        border-radius: 11px;
+        cursor: pointer;
+        background: linear-gradient(135deg, var(--blue), var(--mint));
+        color: #fff;
+        font-weight: 800;
+        font-size: 0.92rem;
+        box-shadow: 0 10px 22px rgba(30, 136, 229, 0.28);
+      }
+      .select-btn:hover {
+        transform: translateY(-2px);
+      }
+
+      footer {
+        padding: 20px 0 40px;
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+
+      @media (max-width: 900px) {
+        .summary {
+          grid-template-columns: 1fr 1fr;
+        }
+        .edit-btn {
+          grid-column: 1/-1;
+        }
+        .flight-card {
+          grid-template-columns: 1fr;
+        }
+        .flight-main {
+          grid-template-columns: 1fr;
+          gap: 16px;
+        }
+        .flight-side {
+          align-items: stretch;
+          border-left: none;
+          border-top: 1px dashed var(--line);
+        }
+        .price {
+          text-align: left;
+        }
+        .flight-side .seats-pill {
+          align-self: flex-start;
+        }
+      }
+      @media (max-width: 600px) {
+        .nav {
+          flex-wrap: wrap;
+          justify-content: center;
+          padding: 12px 0;
+        }
+        .nav-links {
+          width: 100%;
+          justify-content: center;
+          flex-wrap: wrap;
+          margin-left: 0;
+        }
+        .timeline {
+          grid-template-columns: auto minmax(50px, 1fr) auto;
+          gap: 10px;
+        }
+        .time-block strong {
+          font-size: 1.1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav class="nav container">
+        <div class="brand">
+          <img
+            class="brand-logo"
+            src="airline_logo.png"
+            alt="AK AIR"
+            onerror="
+              this.style.display = 'none';
+              this.nextElementSibling.style.display = 'inline-flex';
+            "
+          />
+          <span class="logo-mark" style="display: none">AK</span>
+        </div>
+        <div class="nav-links">
+          <a href="airline.html">Home</a>
+          <a href="airline_search.html" class="is-active">Flights</a>
+          <a href="airline.html#about">About Us</a>
+          <a href="airline.html#contact">Contact</a>
+        </div>
+        <a href="airline.html#contact" class="nav-cta">Book Now</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="container">
+        <span class="eyebrow" id="tripEyebrow">Available flights</span>
+        <h1>
+          <span id="heroFrom">Anywhere</span>
+          <span class="arrow">&rarr;</span>
+          <span id="heroTo">Anywhere</span>
+        </h1>
+        <p id="heroSub">Choose the AK AIR flight that fits your journey.</p>
+
+        <div class="summary">
+          <div class="item">
+            <span>From</span><strong id="sumFrom">Anywhere</strong>
+          </div>
+          <div class="item">
+            <span>To</span><strong id="sumTo">Anywhere</strong>
+          </div>
+          <div class="item">
+            <span>Departure</span><strong id="sumDepart">&mdash;</strong>
+          </div>
+          <div class="item">
+            <span>Trip</span><strong id="sumTrip">One-way</strong>
+          </div>
+          <button type="button" class="edit-btn" id="editBtn">
+            &#9998; Edit search
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <main class="container">
+      <div class="status-bar">
+        <h2 id="resultsTitle">Results</h2>
+        <span class="count"
+          >Showing <strong id="countNum">0</strong> flights</span
+        >
+      </div>
+      <div id="noticeWrap"></div>
+      <div class="flight-list" id="flightList"></div>
+    </main>
+
+    <footer>&copy; 2026 AK AIR &bull; Fictional airline project</footer>
+
+    <script>
+      /* =============================================================
+     FLIGHT DATA — matches `flights` array in airline2.html
+  ============================================================= */
+      var FLIGHTS = [
+        {
+          flightNo: "AK001",
+          aircraft: "Boeing 737",
+          from: "Kochi",
+          fromCode: "COK",
+          to: "Almaty",
+          toCode: "ALA",
+          departTime: "09:15",
+          arriveTime: "15:55",
+          duration: "6h 40m",
+          stops: "Direct",
+          price: 18499,
+          Tseats: 184,
+        },
+        {
+          flightNo: "AK002",
+          aircraft: "ATR 42",
+          from: "Kochi",
+          fromCode: "COK",
+          to: "Thiruvananthapuram",
+          toCode: "TRV",
+          departTime: "10:00",
+          arriveTime: "10:50",
+          duration: "50m",
+          stops: "Direct",
+          price: 3999,
+          Tseats: 74,
+        },
+        {
+          flightNo: "AK003",
+          aircraft: "ATR 42",
+          from: "Thiruvananthapuram",
+          fromCode: "TRV",
+          to: "Kochi",
+          toCode: "COK",
+          departTime: "10:00",
+          arriveTime: "10:50",
+          duration: "50m",
+          stops: "Direct",
+          price: 3999,
+          Tseats: 74,
+        },
+        {
+          flightNo: "AK004",
+          aircraft: "A380",
+          from: "Kuttippuram",
+          fromCode: "KTT",
+          to: "Pallipuram",
+          toCode: "PLP",
+          departTime: "09:00",
+          arriveTime: "09:10",
+          duration: "10m",
+          stops: "Direct",
+          price: 459,
+          Tseats: 440,
+        },
+        {
+          flightNo: "AK005",
+          aircraft: "A380",
+          from: "Pallipuram",
+          fromCode: "PLP",
+          to: "Kuttippuram",
+          toCode: "KTT",
+          departTime: "09:00",
+          arriveTime: "09:10",
+          duration: "10m",
+          stops: "Direct",
+          price: 459,
+          Tseats: 440,
+        },
+        {
+          flightNo: "AK006",
+          aircraft: "A380",
+          from: "Kochi",
+          fromCode: "COK",
+          to: "Pallipuram",
+          toCode: "PLP",
+          departTime: "10:50",
+          arriveTime: "11:20",
+          duration: "30m",
+          stops: "Direct",
+          price: 2999,
+          Tseats: 440,
+        },
+      ];
+
+      /* =============================================================
+     HELPERS
+  ============================================================= */
+      /* ---------------------------------------------------------------
+   Deterministic "seats left" per flight + per day.
+   Same flight on the same day = same number (so it doesn't flicker
+   on every keystroke). Refreshes tomorrow, or if you change the
+   date in the search.
+---------------------------------------------------------------- */
+      function seatsLeftFor(flight, dateStr) {
+        var total = flight.Tseats || 180;
+        var key = flight.flightNo + "|" + (dateStr || todayISO());
+
+        // Turn the key into a numeric seed
+        var seed = 2166136261;
+        for (var i = 0; i < key.length; i++) {
+          seed ^= key.charCodeAt(i);
+          seed = (seed * 16777619) >>> 0;
+        }
+
+        // Simple LCG so we can pull multiple random numbers from one seed
+        function rand() {
+          seed = (seed * 1664525 + 1013904223) >>> 0;
+          return seed / 4294967296;
+        }
+
+        // Decide how full the flight is (tiered)
+        var roll = rand();
+        var ratio;
+        if (roll < 0.1) {
+          ratio = 0.02 + rand() * 0.08; //  2–10%  → nearly sold out
+        } else if (roll < 0.3) {
+          ratio = 0.1 + rand() * 0.2; // 10–30%  → limited
+        } else if (roll < 0.7) {
+          ratio = 0.3 + rand() * 0.35; // 30–65%  → moderate
+        } else {
+          ratio = 0.65 + rand() * 0.3; // 65–95%  → plenty
+        }
+
+        var seats = Math.round(total * ratio);
+        return Math.max(2, Math.min(total, seats));
+      }
+      function norm(v) {
+        return String(v == null ? "" : v)
+          .trim()
+          .toLowerCase();
+      }
+
+      function titleCase(v) {
+        return String(v == null ? "" : v).replace(/\S+/g, function (w) {
+          return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+        });
+      }
+
+      function money(n) {
+        return "\u20B9" + Math.round(n).toLocaleString("en-IN");
+      }
+
+      function todayISO() {
+        var d = new Date();
+        return (
+          d.getFullYear() +
+          "-" +
+          String(d.getMonth() + 1).padStart(2, "0") +
+          "-" +
+          String(d.getDate()).padStart(2, "0")
+        );
+      }
+
+      function formatDate(iso) {
+        if (!iso) return "Flexible";
+        var d = new Date(iso + "T00:00:00");
+        if (isNaN(d.getTime())) return "Flexible";
+        return d.toLocaleDateString("en-IN", {
+          weekday: "short",
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        });
+      }
+
+      /* =============================================================
+     READ URL PARAMS SUBMITTED BY airline.html
+  ============================================================= */
+      var params = new URLSearchParams(window.location.search);
+      var fromQ = params.get("From") || "";
+      var toQ = params.get("To") || "";
+      var dateQ = params.get("DepartureDate") || "";
+      var returnQ = params.get("ReturnDate") || "";
+      var tripQ = params.get("trip") || "one-way";
+
+      /* =============================================================
+     MATCHING
+  ============================================================= */
+      function matchesRoute(flight, fromQ, toQ) {
+        var fq = norm(fromQ),
+          tq = norm(toQ);
+        var fFrom = norm(flight.from),
+          fFromCode = norm(flight.fromCode);
+        var fTo = norm(flight.to),
+          fToCode = norm(flight.toCode);
+
+        var fromOK =
+          !fq || fFrom === fq || fFromCode === fq || fFrom.indexOf(fq) !== -1;
+        var toOK =
+          !tq || fTo === tq || fToCode === tq || fTo.indexOf(tq) !== -1;
+        return fromOK && toOK;
+      }
+
+      /* =============================================================
+     RENDER
+  ============================================================= */
+      var listEl = document.getElementById("flightList");
+      var noticeEl = document.getElementById("noticeWrap");
+      var countNum = document.getElementById("countNum");
+      var titleEl = document.getElementById("resultsTitle");
+
+      function renderCards(list) {
+        var html = "";
+        for (var i = 0; i < list.length; i++) {
+          var f = list[i];
+          var seatsLeft = seatsLeftFor(f, dateQ);
+          // "Low" threshold scales with aircraft size:
+          // A380 with 30 seats left is "low"; ATR with 30 left is normal.
+          var lowThreshold = Math.max(5, Math.round(f.Tseats * 0.08));
+          var seatCls =
+            seatsLeft <= lowThreshold ? "seats-pill low" : "seats-pill";
+          html +=
+            '<article class="flight-card">' +
+            '<div class="flight-main">' +
+            '<div class="airline-block">' +
+            '<img class="airline-logo" src="airline_logo.png" alt="AK AIR" ' +
+            "onerror=\"this.style.display='none';this.nextElementSibling.style.display='inline-flex'\" />" +
+            '<span class="logo-mark" style="display:none">AK</span>' +
+            '<div class="airline-text">' +
+            "<strong>AK AIR</strong>" +
+            "<span>" +
+            f.flightNo +
+            " &middot; " +
+            f.aircraft +
+            "</span>" +
+            "</div>" +
+            "</div>" +
+            '<div class="timeline">' +
+            '<div class="time-block">' +
+            "<strong>" +
+            f.departTime +
+            "</strong>" +
+            "<span>" +
+            f.fromCode +
+            " &middot; " +
+            f.from +
+            "</span>" +
+            "</div>" +
+            '<div class="path">' +
+            '<span class="path-duration">' +
+            f.duration +
+            "</span>" +
+            '<span class="path-track"></span>' +
+            '<span class="path-stops">' +
+            f.stops +
+            "</span>" +
+            "</div>" +
+            '<div class="time-block right">' +
+            "<strong>" +
+            f.arriveTime +
+            "</strong>" +
+            "<span>" +
+            f.toCode +
+            " &middot; " +
+            f.to +
+            "</span>" +
+            "</div>" +
+            "</div>" +
+            "</div>" +
+            '<div class="flight-side">' +
+            '<div class="price">' +
+            "<strong>" +
+            money(f.price) +
+            "</strong>" +
+            "<span>per passenger</span>" +
+            "</div>" +
+            '<span class="' +
+            seatCls +
+            '">' +
+            seatsLeft +
+            " seats left</span>" +
+            '<button type="button" class="select-btn" data-select="' +
+            f.flightNo +
+            '">Select flight</button>' +
+            "</div>" +
+            "</article>";
+        }
+        listEl.innerHTML = html;
+      }
+
+      function renderSummary() {
+        var fromLabel = fromQ ? titleCase(fromQ) : "Anywhere";
+        var toLabel = toQ ? titleCase(toQ) : "Anywhere";
+
+        document.getElementById("heroFrom").textContent = fromLabel;
+        document.getElementById("heroTo").textContent = toLabel;
+        document.getElementById("sumFrom").textContent = fromLabel;
+        document.getElementById("sumTo").textContent = toLabel;
+        document.getElementById("sumDepart").textContent = dateQ
+          ? formatDate(dateQ)
+          : "Flexible";
+        document.getElementById("sumTrip").textContent =
+          tripQ === "round-trip" ? "Round-trip" : "One-way";
+        document.getElementById("tripEyebrow").textContent =
+          tripQ === "round-trip"
+            ? "Outbound · Round-trip"
+            : "Available flights";
+
+        document.getElementById("heroSub").textContent =
+          fromQ || toQ
+            ? "Here are the AK AIR flights matching your search. Pick one to continue."
+            : "Showing every AK AIR flight. Use \u201cEdit search\u201d to filter.";
+      }
+
+      function render() {
+        renderSummary();
+
+        var matches = FLIGHTS.filter(function (f) {
+          return matchesRoute(f, fromQ, toQ);
+        });
+
+        // If a route was given but nothing matched → fall back to all + notice
+        var fellBack = false;
+        if (!matches.length && (fromQ || toQ)) {
+          matches = FLIGHTS.slice();
+          fellBack = true;
+        }
+
+        // Sort by price ascending by default
+        matches.sort(function (a, b) {
+          return a.price - b.price;
+        });
+
+        countNum.textContent = matches.length;
+
+        if (fromQ || toQ) {
+          titleEl.textContent =
+            titleCase(fromQ || "Anywhere") +
+            " \u2192 " +
+            titleCase(toQ || "Anywhere");
+        } else {
+          titleEl.textContent = "All AK AIR flights";
+        }
+
+        if (fellBack) {
+          noticeEl.innerHTML =
+            '<div class="notice">' +
+            "No AK AIR flights match <strong>" +
+            titleCase(fromQ) +
+            " \u2192 " +
+            titleCase(toQ) +
+            "</strong>. Showing all available flights instead. " +
+            "Try one of our current routes: Kochi &harr; Almaty, Kochi &harr; Thiruvananthapuram, " +
+            "Kuttippuram &harr; Pallipuram, or Kochi &rarr; Pallipuram." +
+            "</div>";
+        } else {
+          noticeEl.innerHTML = "";
+        }
+
+        renderCards(matches);
+      }
+
+      /* =============================================================
+     EVENTS
+  ============================================================= */
+      listEl.addEventListener("click", function (e) {
+        var btn = e.target.closest("[data-select]");
+        if (!btn) return;
+
+        var flightNo = btn.getAttribute("data-select");
+        var flight = null;
+        for (var i = 0; i < FLIGHTS.length; i++) {
+          if (FLIGHTS[i].flightNo === flightNo) {
+            flight = FLIGHTS[i];
+            break;
+          }
+        }
+        if (!flight) return;
+
+        var date = dateQ || todayISO();
+
+        var payload = {
+          flightNo: flight.flightNo,
+          aircraft: flight.aircraft,
+          from: flight.from,
+          fromCode: flight.fromCode,
+          to: flight.to,
+          toCode: flight.toCode,
+          departTime: flight.departTime,
+          arriveTime: flight.arriveTime,
+          duration: flight.duration,
+          stops: flight.stops,
+          price: flight.price,
+          date: date,
+          trip: tripQ,
+        };
+        try {
+          localStorage.setItem("akairSelectedFlight", JSON.stringify(payload));
+        } catch (err) {}
+
+        var q = new URLSearchParams();
+        q.set("flight", flight.flightNo);
+        q.set("DepartureDate", date);
+        window.location.href = "flightsel.html?" + q.toString();
+      });
+
+      document.getElementById("editBtn").addEventListener("click", function () {
+        var q = new URLSearchParams();
+        if (fromQ) q.set("From", fromQ);
+        if (toQ) q.set("To", toQ);
+        if (dateQ) q.set("DepartureDate", dateQ);
+        if (returnQ) q.set("ReturnDate", returnQ);
+        q.set("trip", tripQ);
+
+        var queryString = q.toString();
+        window.location.href =
+          "Airline.html" + (queryString ? "?" + queryString : "");
+      });
+
+      /* =============================================================
+     INIT
+  ============================================================= */
+      render();
+    </script>
+  </body>
+</html>
