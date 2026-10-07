@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flight Check-In</title>
+    <style>
+      :root {
+        --bg-1: #eef8ff;
+        --bg-2: #d9f0ff;
+        --panel: #ffffff;
+        --primary: #1f79ff;
+        --primary-dark: #1556c9;
+        --text: #1c2430;
+        --muted: #5f6b7a;
+        --border: #dfeaf3;
+        --shadow: rgba(31, 121, 255, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        font-family: Arial, Helvetica, sans-serif;
+        background: linear-gradient(
+          135deg,
+          var(--bg-1),
+          var(--bg-2),
+          #cfe7ff 60%,
+          #99c6ff
+        );
+        color: var(--text);
+        padding: 24px;
+      }
+
+      .checkin-wrapper {
+        width: min(100%, 460px);
+      }
+
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        box-shadow: 0 20px 45px var(--shadow);
+        padding: 32px 24px 24px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 8px;
+      }
+
+      .brand-badge {
+        width: 42px;
+        height: 42px;
+        display: grid;
+        place-items: center;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--primary), #75b6ff);
+        color: #fff;
+        font-weight: 700;
+        font-size: 1.1rem;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(1.8rem, 3vw, 2.3rem);
+      }
+
+      .subtitle {
+        margin: 8px 0 24px;
+        color: var(--muted);
+        font-size: 0.98rem;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .field-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      label {
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 0.95rem 1rem;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        font-size: 1rem;
+        transition:
+          border-color 0.2s ease,
+          box-shadow 0.2s ease;
+        background: #fdfefe;
+        color: var(--text);
+      }
+
+      select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image:
+          linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+          linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+        background-position:
+          calc(100% - 20px) calc(50% - 3px),
+          calc(100% - 15px) calc(50% - 3px);
+        background-size:
+          5px 5px,
+          5px 5px;
+        background-repeat: no-repeat;
+        padding-right: 2.75rem;
+      }
+
+      input:focus,
+      select:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(31, 121, 255, 0.15);
+      }
+
+      button {
+        margin-top: 8px;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        );
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 700;
+        padding: 0.95rem 1.25rem;
+        cursor: pointer;
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+        box-shadow: 0 12px 24px rgba(21, 86, 201, 0.2);
+      }
+
+      button:hover {
+        transform: translateY(-1px);
+      }
+
+      button:active {
+        transform: translateY(0);
+      }
+
+      .helper {
+        margin-top: 8px;
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+
+      @media (max-width: 480px) {
+        body {
+          padding: 16px;
+        }
+
+        .card {
+          padding: 24px 18px 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="checkin-wrapper">
+      <div class="card">
+        <div class="brand">
+          <div class="brand-badge">✈</div>
+          <h1>Check-In</h1>
+        </div>
+
+        <p class="subtitle">
+          Enter your booking details to find your reservation.
+        </p>
+
+        <form id="checkin-form">
+          <div class="field-group">
+            <label for="booking-reference">Booking reference</label>
+            <input
+              id="booking-reference"
+              name="bookingReference"
+              type="text"
+              placeholder="e.g. ABC123"
+              required
+            />
+          </div>
+
+          <div class="field-group">
+            <label for="lastname">Last name</label>
+            <input
+              id="lastname"
+              name="lastname"
+              type="text"
+              placeholder="Enter your last name"
+              required
+            />
+          </div>
+          <div class="field-group">
+            <label for="flight">Select your flight</label>
+            <select id="flight" name="flight" required>
+              <option value="">Choose a flight</option>
+              <option value="AK AIR 001 - Kochi to Almarty">
+                AK AIR 001 - Kochi to Almarty
+              </option>
+              <option value="AK AIR 002 - Kochi to Thiruvananthapuram">
+                AK AIR 002 - Kochi to Thiruvananthapuram
+              </option>
+              <option value="AK AIR 003 - Pallippuram to Kuttippuram">
+                AK AIR 003 - Pallippuram to Kuttippuram
+              </option>
+              <option value="AK AIR 004 - Kuttippuram to Pallippuram">
+                AK AIR 004 - Kuttippuram to Pallippuram
+              </option>
+            </select>
+          </div>
+
+          <button id="find-booking" type="submit">Find Booking</button>
+        </form>
+
+        <div class="helper">
+          Need help with your reservation? Contact support.
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script>
+    document
+      .getElementById("checkin-form")
+      .addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const pnr = document.getElementById("booking-reference").value;
+        const lastname = document.getElementById("lastname").value;
+        const flightSelect = document.getElementById("flight");
+        const flight = flightSelect.value;
+
+        const params = new URLSearchParams({
+          pnr: pnr,
+          lastname: lastname,
+          flight: flight,
+        });
+
+        window.location.href = "passInfo.html?" + params.toString();
+      });
+  </script>
+</html>

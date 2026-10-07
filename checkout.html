@@ -1186,6 +1186,8 @@
         <a href="Airline.html#about"> About </a>
 
         <a href="Airline.html#contact"> Contact </a>
+
+        <a href="checkin.html"> Check In </a>
       </nav>
     </header>
 
@@ -1207,7 +1209,10 @@
       <section class="coupon-offer" aria-label="Current AK AIR coupon">
         <div>
           <h2>Limited-time random coupon</h2>
-          <p><strong data-coupon-percent></strong>% off base fare and passenger fare.</p>
+          <p>
+            <strong data-coupon-percent></strong>% off base fare and passenger
+            fare.
+          </p>
         </div>
         <div class="coupon-offer-code">
           <p>Use code <strong data-coupon-code>------</strong></p>
@@ -1744,7 +1749,7 @@
          JAVASCRIPT
     ====================================================== -->
 
-        <script src="coupons.js"></script>
+    <script src="coupons.js"></script>
     <script>
       /* =====================================================
            FLIGHT DATABASE
@@ -2162,7 +2167,8 @@
           const price = calculateTotal();
 
           voucherDiscount = Math.round(
-            (price.baseFare + price.passengerFare) * (activeCoupon.discount / 100),
+            (price.baseFare + price.passengerFare) *
+              (activeCoupon.discount / 100),
           );
 
           alert(
