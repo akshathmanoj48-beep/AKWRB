@@ -304,6 +304,29 @@
         font-size: 20px;
       }
 
+      .passenger-container {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .passenger-form-card {
+        padding: 18px;
+        border: 1px solid #e1e8ef;
+        border-radius: 12px;
+        background: #f8fafc;
+      }
+
+      .passenger-form-card h3 {
+        margin-bottom: 14px;
+        color: #073b73;
+        font-size: 15px;
+      }
+
+      .passenger-form-card .form-grid {
+        gap: 14px;
+      }
+
       /* =====================================================
            FLIGHT SUMMARY
         ===================================================== */
@@ -1302,21 +1325,9 @@
           <!-- PASSENGER -->
 
           <section class="card">
-            <h2 class="card-title">👤 Passenger Details</h2>
+            <h2 class="card-title">👤 Booking Contact</h2>
 
             <div class="form-grid">
-              <div class="form-group">
-                <label> First Name </label>
-
-                <input id="firstName" type="text" placeholder="First name" />
-              </div>
-
-              <div class="form-group">
-                <label> Last Name </label>
-
-                <input id="lastName" type="text" placeholder="Last name" />
-              </div>
-
               <div class="form-group">
                 <label> Email </label>
 
@@ -1328,29 +1339,13 @@
 
                 <input id="phone" type="tel" placeholder="+91 98765 43210" />
               </div>
-
-              <div class="form-group">
-                <label> Date of Birth </label>
-
-                <input id="dob" type="date" />
-              </div>
-
-              <div class="form-group">
-                <label> Nationality </label>
-
-                <select id="nationality">
-                  <option value="">Select nationality</option>
-
-                  <option>Indian</option>
-
-                  <option>Kazakhstan</option>
-
-                  <option>United Arab Emirates</option>
-
-                  <option>Other</option>
-                </select>
-              </div>
             </div>
+          </section>
+
+          <section class="card">
+            <h2 class="card-title">🧾 Passenger Details</h2>
+
+            <div id="passengerForms" class="passenger-container"></div>
           </section>
 
           <!-- PASSENGERS -->
@@ -1927,6 +1922,73 @@
 
       let passengers = 1;
 
+      function renderPassengerForms() {
+        const container = document.getElementById("passengerForms");
+
+        if (!container) return;
+
+        container.innerHTML = "";
+
+        for (let index = 1; index <= passengers; index++) {
+          const card = document.createElement("div");
+          card.className = "passenger-form-card";
+
+          card.innerHTML = `
+            <h3>Passenger ${index}</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label> First Name </label>
+                <input id="passenger-${index}-firstName" type="text" placeholder="First name" />
+              </div>
+
+              <div class="form-group">
+                <label> Last Name </label>
+                <input id="passenger-${index}-lastName" type="text" placeholder="Last name" />
+              </div>
+
+              <div class="form-group">
+                <label> Date of Birth </label>
+                <input id="passenger-${index}-dob" type="date" />
+              </div>
+
+              <div class="form-group">
+                <label> Nationality </label>
+                <select id="passenger-${index}-nationality">
+                  <option value="">Select nationality</option>
+                  <option>Indian</option>
+                  <option>Kazakhstan</option>
+                  <option>United Arab Emirates</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+          `;
+
+          container.appendChild(card);
+        }
+      }
+
+      function getPassengerEntries() {
+        const entries = [];
+
+        for (let index = 1; index <= passengers; index++) {
+          const firstName = document
+            .getElementById(`passenger-${index}-firstName`)
+            ?.value.trim();
+          const lastName = document
+            .getElementById(`passenger-${index}-lastName`)
+            ?.value.trim();
+          const dob = document.getElementById(`passenger-${index}-dob`)?.value;
+          const nationality = document.getElementById(
+            `passenger-${index}-nationality`,
+          )?.value;
+
+          entries.push({ firstName, lastName, dob, nationality });
+        }
+
+        return entries;
+      }
+
       /* =====================================================
            VOUCHER
         ===================================================== */
@@ -2168,7 +2230,7 @@
             passengers--;
 
             document.getElementById("passengerCount").textContent = passengers;
-
+            renderPassengerForms();
             updateSummary();
           }
         });
@@ -2178,7 +2240,7 @@
           passengers++;
 
           document.getElementById("passengerCount").textContent = passengers;
-
+          renderPassengerForms();
           updateSummary();
         }
       });
@@ -2321,16 +2383,29 @@
         ===================================================== */
 
       document.getElementById("payButton").addEventListener("click", () => {
-        const firstName = document.getElementById("firstName").value.trim();
-
-        const lastName = document.getElementById("lastName").value.trim();
-
         const email = document.getElementById("email").value.trim();
-
+        const phone = document.getElementById("phone").value.trim();
         const terms = document.getElementById("terms").checked;
 
-        if (!firstName || !lastName || !email) {
-          alert("Please enter the passenger's name and email.");
+        if (!email || !phone) {
+          alert("Please enter the booking contact email and phone number.");
+
+          return;
+        }
+
+        const passengersData = getPassengerEntries();
+        const missingPassenger = passengersData.findIndex(
+          (entry, index) =>
+            !entry.firstName ||
+            !entry.lastName ||
+            !entry.dob ||
+            !entry.nationality,
+        );
+
+        if (missingPassenger !== -1) {
+          alert(
+            `Please complete all required details for Passenger ${missingPassenger + 1}.`,
+          );
 
           return;
         }
@@ -2412,8 +2487,12 @@
             document.getElementById("ticketRoute").textContent =
               selectedFlight.fromCode + " → " + selectedFlight.toCode;
 
+            const passengerNames = getPassengerEntries()
+              .map((entry) => `${entry.firstName} ${entry.lastName}`)
+              .join(", ");
+
             document.getElementById("ticketPassenger").textContent =
-              firstName + " " + lastName;
+              passengerNames;
 
             document.getElementById("ticketDate").textContent =
               formatDate(departureDate);
@@ -2448,6 +2527,7 @@
            INITIAL PRICE
         ===================================================== */
 
+      renderPassengerForms();
       updateSummary();
     </script>
   </body>
